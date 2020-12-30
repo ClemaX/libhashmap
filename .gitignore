@@ -1,0 +1,8 @@
+# C/CPP Binaries
+skeleton
+obj/
+*.out
+*.o
+
+# macOS
+.DS_Store
