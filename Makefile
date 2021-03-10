@@ -1,21 +1,26 @@
 NAME = skeleton
 
-# Compiler
+# Compiler and linker
 CC = clang
 LD = clang
 
 # Paths
-SRCDIR=src
-INCDIR=include
+SRCDIR = src
+INCDIR = include
+LIBDIR = lib
 
-OBJDIR=obj
-BINDIR=.
+OBJDIR = obj
+BINDIR = .
 
-# Flags
-CFLAGS = -Wall -Wextra -I$(INCDIR) -g3
-DFLAGS = -MT $@ -MMD -MP -MF $(OBJDIR)/$*.d
-LDFLAGS = -g3
+# Library dependencies
+LIBS = $(addprefix $(LIBDIR), )
 
+LIBDIRS = $(dir $(LIBS))
+LIBINCS = $(addsuffix $(INCDIR), $(LIBDIRS))
+LIBARS = $(notdir $(LIBS))
+
+# Sources
+INCS = $(LIBINCS) $(INCDIR)
 SRCS = $(addprefix $(SRCDIR)/,\
 	main.c\
 )
@@ -23,6 +28,13 @@ SRCS = $(addprefix $(SRCDIR)/,\
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
+# Flags
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR)
+DFLAGS = -MT $@ -MMD -MP -MF $(OBJDIR)/$*.d
+LDFLAGS = $(LIBDIRS:%=-L%)
+LDLIBS = $(LIBARS:lib%.a=-l%)
+
+# Compiling commands
 COMPILE.c = $(CC) $(DFLAGS) $(CFLAGS) -c
 COMPILE.o = $(LD) $(LDFLAGS)
 
@@ -49,10 +61,14 @@ $(BINDIR)/$(NAME): $(OBJS) | $(BINDIR)
 	$(COMPILE.o) $^ -o $@ $(LDLIBS)
 
 clean:
+	$(foreach dir, $(LIBDIRS),\
+		@echo "MK $(addprefix -C, $(LIBDIRS)) $@" && make -C $(dir) $@ && ):
 	@echo "RM $(OBJDIR)"
 	rm -rf "$(OBJDIR)"
 
 fclean: clean
+	$(foreach dir, $(LIBDIRS),\
+		@echo "MK $(addprefix -C, $(LIBDIRS)) $@" && make -C $(dir) $@ && ):
 	@echo "RM $(BINDIR)/$(NAME)"
 	rm -f "$(BINDIR)/$(NAME)"
 	@rmdir "$(BINDIR)" 2>/dev/null && echo "RM $(BINDIR)" || :
