@@ -45,6 +45,10 @@ $(OBJDIR) $(BINDIR):
 	@echo "MK $@"
 	mkdir -p "$@"
 
+# Libraries
+$(LIBS): %.a: FORCE
+	make -C $(dir $@) NAME=$(@F)
+
 # Objects
 $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.c $(OBJDIR)/%.d | $(OBJDIR)
 	@mkdir -p '$(@D)'
@@ -56,7 +60,7 @@ $(DEPS): $(OBJDIR)/%.d:
 include $(wildcard $(DEPS))
 
 # Binaries
-$(BINDIR)/$(NAME): $(OBJS) | $(BINDIR)
+$(BINDIR)/$(NAME): $(OBJS) $(LIBS) | $(BINDIR)
 	@echo "LD $@"
 	$(COMPILE.o) $^ -o $@ $(LDLIBS)
 
@@ -75,7 +79,9 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: clean fclean re
+FORCE: ;
+
+.PHONY: all clean fclean re
 
 # Assign a value to VERBOSE to enable verbose output
 $(VERBOSE).SILENT:
