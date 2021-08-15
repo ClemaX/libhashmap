@@ -3,52 +3,6 @@
 #include <hash_map.h>
 
 /**
- * @brief Add a key-value pair to a map_pair list.
- *
- * @param map	The bucket at the key's index.
- * @param elem 	A key-value pair matching to the key's index,
- */
-void map_pair_add(map_pair **bucket, map_pair *elem)
-{
-	elem->next = *bucket;
-	*bucket = elem;
-}
-
-/**
- * @brief Allocate a new key-value pair.
- *
- * @param key	Index key.
- * @param value	Mapped value.
- * @return map_pair*
- */
-map_pair *map_pair_new(const char *key, void *value)
-{
-	map_pair *const pair = malloc(sizeof(*pair));
-
-	if (pair != NULL)
-		*pair = (map_pair){key, value, NULL};
-
-	return pair;
-}
-
-/**
- * @brief Clear a map's key-value pair list.
- *
- * @param pair	The map's bucket to be cleared,
- */
-void map_pair_clr(map_pair **pair)
-{
-	map_pair *curr;
-
-	while (*pair != NULL)
-	{
-		curr = *pair;
-		*pair = curr->next;
-		free(curr);
-	}
-}
-
-/**
  * @brief Allocate a hash_map for a given size.
  *
  * @param size	The maximal amount of elements.
