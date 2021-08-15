@@ -3,7 +3,7 @@
 typedef struct s_map_pair
 {
 	const char *key;
-	const char *value;
+	void *value;
 	struct s_map_pair *next;
 } map_pair;
 
@@ -22,7 +22,7 @@ void map_pair_add(map_pair **bucket, map_pair *elem);
  * @param value	Mapped value.
  * @return hash_map*
  */
-map_pair *map_pair_new(const char *key, const char *value);
+map_pair *map_pair_new(const char *key, void *value);
 
 /**
  * @brief Clear a map's key-value pair list.

@@ -46,7 +46,7 @@ const char *hash_map_get(const hash_map *const map, const char *key);
  * @param value	The value to be set.
  * @return const map_pair*
  */
-const map_pair *hash_map_set(hash_map *map, const char *key, const char *value);
+const map_pair *hash_map_set(hash_map *map, const char *key, void *const value);
 
 /**
  * @brief Free the map's memory and set it's pointer to NULL.

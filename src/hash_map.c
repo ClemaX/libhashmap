@@ -21,7 +21,7 @@ void map_pair_add(map_pair **bucket, map_pair *elem)
  * @param value	Mapped value.
  * @return map_pair*
  */
-map_pair *map_pair_new(const char *key, const char *value)
+map_pair *map_pair_new(const char *key, void *value)
 {
 	map_pair *const pair = malloc(sizeof(*pair));
 
@@ -113,7 +113,7 @@ const char *hash_map_get(const hash_map *const map, const char *key)
  * @param value	The value to be set.
  * @return const map_pair*
  */
-const map_pair *hash_map_set(hash_map *map, const char *key, const char *value)
+const map_pair *hash_map_set(hash_map *map, const char *const key, void *const value)
 {
 	const size_t index = hash_function(key, map->size);
 	map_pair **bucket = map->buckets + index;
