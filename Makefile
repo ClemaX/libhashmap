@@ -1,4 +1,4 @@
-NAME = skeleton
+NAME = hash_map
 
 # Compiler and linker
 CC = clang
