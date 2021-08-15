@@ -1,8 +1,9 @@
-NAME = hash_map
+NAME = libhashmap.a
 
 # Compiler and linker
 CC = clang
 LD = clang
+AR = ar
 
 # Paths
 include srcs.mk
@@ -24,15 +25,23 @@ INCS = $(LIBINCS) $(INCDIR)
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
+# Tests
+TESTDIR = test
+TESTSRCS = $(addprefix $(TESTDIR)/, main.c)
+TESTOBJS = $(TESTSRCS:$(TESTDIR)/%.c=$(OBJDIR)/%.o)
+TESTDEPS = $(TESTOBJS:.o=.d)
+
 # Flags
-CFLAGS = -Wall -Wextra -Werror $(INCS:%=-I%)
+CFLAGS = -Wall -Wextra -Werror $(INCS:%=-I%) -g3
 DFLAGS = -MT $@ -MMD -MP -MF $(OBJDIR)/$*.d
-LDFLAGS = $(LIBDIRS:%=-L%)
+LDFLAGS = $(LIBDIRS:%=-L%) -g3
+ARFLAGS = -rcs
 LDLIBS = $(LIBARS:lib%.a=-l%)
 
 # Compiling commands
 COMPILE.c = $(CC) $(DFLAGS) $(CFLAGS) -c
 COMPILE.o = $(LD) $(LDFLAGS)
+ARCHIVE.o = $(AR) $(ARFLAGS)
 
 all: $(BINDIR)/$(NAME)
 
@@ -55,10 +64,26 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.c $(OBJDIR)/%.d | $(OBJDIR)
 $(DEPS): $(OBJDIR)/%.d:
 include $(wildcard $(DEPS))
 
+$(TESTDEPS): $(OBJDIR)/%.d:
+include $(wildcard $(TESTDEPS))
+
 # Binaries
 $(BINDIR)/$(NAME): $(OBJS) $(LIBS) | $(BINDIR)
-	@echo "LD $@"
-	$(COMPILE.o) $^ -o $@ $(LDLIBS)
+	@echo "AR $@"
+	$(ARCHIVE.o) $@ $^
+
+# Tests
+$(TESTOBJS): $(OBJDIR)/%.o: $(TESTDIR)/%.c $(OBJDIR)/%.d | $(OBJDIR)
+	@mkdir -p '$(@D)'
+	@echo "CC $<"
+	$(COMPILE.c) $< -o $@
+
+tests: $(BINDIR)/$(NAME) $(TESTOBJS)
+	$(COMPILE.o) -L$(BINDIR) $(TESTOBJS) -o $@ $(LDLIBS) -l$(<:lib%.a=%)
+
+debug: CFLAGS += -DDEBUG -g3 -fsanitize=address
+debug: LDFLAGS += -g3 -fsanitize=address
+debug: re
 
 clean:
 	$(foreach dir, $(LIBDIRS),\

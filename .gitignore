@@ -1,5 +1,6 @@
 # C/CPP Binaries
-hash_map
+libhashmap.a
+tests
 obj/
 *.out
 *.o
