@@ -79,6 +79,7 @@ $(TESTOBJS): $(OBJDIR)/%.o: $(TESTDIR)/%.c $(OBJDIR)/%.d | $(OBJDIR)
 	$(COMPILE.c) $< -o $@
 
 tests: $(BINDIR)/$(NAME) $(TESTOBJS)
+	@echo "LD $^"
 	$(COMPILE.o) -L$(BINDIR) $(TESTOBJS) -o $@ $(LDLIBS) -l$(<:lib%.a=%)
 
 debug: CFLAGS += -DDEBUG -g3 -fsanitize=address
