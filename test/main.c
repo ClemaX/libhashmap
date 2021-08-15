@@ -13,10 +13,10 @@ int main(int ac, char **av)
 
 	hash_map_set(map, "iep", "value");
 	hash_map_set(map, "pie", "drip");
-	printf("%s -> %s\n", "iep", hash_map_get(map, "iep"));
-	printf("%s -> %s\n", "pie", hash_map_get(map, "pie"));
+	printf("%s -> %s\n", "iep", (char *)hash_map_get(map, "iep")->value);
+	printf("%s -> %s\n", "pie", (char *)hash_map_get(map, "pie")->value);
 	hash_map_set(map, "pie", "pie");
-	printf("%s -> %s\n", "pie", hash_map_get(map, "pie"));
+	printf("%s -> %s\n", "pie", (char *)hash_map_get(map, "pie")->value);
 
 	hash_map_clr(&map);
 

@@ -36,7 +36,7 @@ size_t hash_function(const char *input, size_t map_size);
  * @param key	The key associated to the value.
  * @return map_pair*
  */
-const char *hash_map_get(const hash_map *const map, const char *key);
+map_pair *hash_map_get(const hash_map *const map, const char *key);
 
 /**
  * @brief Set a value for a key in a hash map.
@@ -46,7 +46,7 @@ const char *hash_map_get(const hash_map *const map, const char *key);
  * @param value	The value to be set.
  * @return const map_pair*
  */
-const map_pair *hash_map_set(hash_map *map, const char *key, void *const value);
+map_pair *hash_map_set(hash_map *map, const char *key, void *const value);
 
 /**
  * @brief Free the map's memory and set it's pointer to NULL.

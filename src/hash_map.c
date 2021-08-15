@@ -48,7 +48,7 @@ size_t hash_function(const char *input, size_t map_size)
  * @param key	The key associated to the value.
  * @return map_pair*
  */
-const char *hash_map_get(const hash_map *const map, const char *key)
+map_pair *hash_map_get(const hash_map *const map, const char *key)
 {
 	const size_t index = hash_function(key, map->size);
 	map_pair *pair = map->buckets[index];
@@ -56,7 +56,7 @@ const char *hash_map_get(const hash_map *const map, const char *key)
 	if (pair != NULL && pair->next != NULL)
 		while (pair != NULL && strcmp(pair->key, key) != 0)
 			pair = pair->next;
-	return pair != NULL ? pair->value : NULL;
+	return pair;
 }
 
 /**
@@ -67,7 +67,7 @@ const char *hash_map_get(const hash_map *const map, const char *key)
  * @param value	The value to be set.
  * @return const map_pair*
  */
-const map_pair *hash_map_set(hash_map *map, const char *const key, void *const value)
+map_pair *hash_map_set(hash_map *map, const char *const key, void *const value)
 {
 	const size_t index = hash_function(key, map->size);
 	map_pair **bucket = map->buckets + index;
