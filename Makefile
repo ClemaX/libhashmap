@@ -5,7 +5,7 @@ CC = clang
 LD = clang
 
 # Paths
-SRCDIR = src
+include srcs.mk
 INCDIR = include
 LIBDIR = lib
 
@@ -21,10 +21,6 @@ LIBARS = $(notdir $(LIBS))
 
 # Sources
 INCS = $(LIBINCS) $(INCDIR)
-SRCS = $(addprefix $(SRCDIR)/,\
-	main.c\
-)
-
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS = $(OBJS:.o=.d)
 
