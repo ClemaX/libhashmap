@@ -9,7 +9,7 @@ int main(int ac, char **av)
 	(void)ac;
 	(void)av;
 
-	hash_map *map = hash_map_new(4);
+	hash_map *map = hash_map_new(512);
 
 	hash_map_set(map, "iep", "value");
 	hash_map_set(map, "pie", "drip");
@@ -18,7 +18,7 @@ int main(int ac, char **av)
 	hash_map_set(map, "pie", "pie");
 	printf("%s -> %s\n", "pie", (char *)hash_map_get(map, "pie")->value);
 
-	hash_map_clr(&map);
+	hash_map_clr(&map, NULL);
 
 	return (0);
 }

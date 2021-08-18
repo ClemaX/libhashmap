@@ -52,5 +52,6 @@ map_pair *hash_map_set(hash_map *map, const char *key, void *const value);
  * @brief Free the map's memory and set it's pointer to NULL.
  *
  * @param map	A reference to the map to be cleared.
+ * @param del	The value's destructor.
  */
-void hash_map_clr(hash_map **map);
+void hash_map_clr(hash_map **map, void(*del(void *)));

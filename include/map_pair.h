@@ -28,5 +28,6 @@ map_pair *map_pair_new(const char *key, void *value);
  * @brief Clear a map's key-value pair list.
  *
  * @param pair	The map's bucket to be cleared,
+ * @param del	The value's destructor.
  */
-void map_pair_clr(map_pair **pair);
+void map_pair_clr(map_pair **pair, void(*del(void *)));
