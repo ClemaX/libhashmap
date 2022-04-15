@@ -26,7 +26,7 @@ map_pair *map_pair_new(const char *key, void *value)
 	map_pair *const pair = malloc(sizeof(*pair));
 
 	if (pair != NULL)
-		*pair = (map_pair){key, value, NULL};
+		*pair = (map_pair){NULL, key, value};
 
 	return pair;
 }

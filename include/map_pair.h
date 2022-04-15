@@ -2,9 +2,9 @@
 
 typedef struct s_map_pair
 {
+	struct s_map_pair *next;
 	const char *key;
 	void *value;
-	struct s_map_pair *next;
 } map_pair;
 
 /**
